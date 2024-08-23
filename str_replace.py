@@ -9,16 +9,17 @@ def replace_text_in_files(folder_path, search_text, replace_text, exclude_dirs=N
         if exclude_dirs:
             dirs[:] = [d for d in dirs if d not in exclude_dirs]
         for file_name in files:
-            file_path = os.path.join(root, file_name)
-            print("file_path:", file_path)
-            if os.path.isfile(file_path):
-                with open(file_path, 'r', encoding='utf-8') as file:
-                    file_content = file.read()
-                if search_text in file_content:
-                    modified_files.append(file_path)  # 紀錄被修改的檔案名稱
-                    file_content = file_content.replace(search_text, replace_text)
-                    with open(file_path, 'w', encoding='utf-8') as file:
-                        file.write(file_content)
+            if file_name.endswith(('.h', '.c')):  # 只篩選 .h 和 .c 檔案
+                file_path = os.path.join(root, file_name)
+                print("file_path:", file_path)
+                if os.path.isfile(file_path):
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        file_content = file.read()
+                    if search_text in file_content:
+                        modified_files.append(file_path)  # 紀錄被修改的檔案名稱
+                        file_content = file_content.replace(search_text, replace_text)
+                        with open(file_path, 'w', encoding='utf-8') as file:
+                            file.write(file_content)
     return modified_files
 
 def main():
